@@ -5,7 +5,7 @@
 //hello
 
 import {getByDotNotation, changeByDotNotation , mergeDefaultPropertyObject, findDistance2Point, findIntersection, rotatePoint, degToRad, findAngle2Point ,findClosestPoint, calculateRotatePoint, radToDeg} from './util/util'
-let variable = 'test'
+let variable = 'hello'
 let lght = {};
 window.mobileCheck = function() {
     let check = false;
