@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 //LIGHT LIBRARY IS DEVELOPED BY LONG TRAN
 //COPYRIGHT 2020, ALL RIGHTS RESERVED
-//Test stuff 2 3 4
+//Test stuff 2 3 4 sadfoius
 
 import {getByDotNotation, changeByDotNotation , mergeDefaultPropertyObject, findDistance2Point, findIntersection, rotatePoint, degToRad, findAngle2Point ,findClosestPoint, calculateRotatePoint, radToDeg} from './util/util'
 
