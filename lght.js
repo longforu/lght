@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 //LIGHT LIBRARY IS DEVELOPED BY LONG TRAN
 //COPYRIGHT 2020, ALL RIGHTS RESERVED
+//hello
 
 import {getByDotNotation, changeByDotNotation , mergeDefaultPropertyObject, findDistance2Point, findIntersection, rotatePoint, degToRad, findAngle2Point ,findClosestPoint, calculateRotatePoint, radToDeg} from './util/util'
 
