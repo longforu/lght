@@ -18,6 +18,31 @@ config.defaultAppConfig = {
     eventListenersFunction:[]
 }
 
+config.defaultCoordinateConfig = {
+    x:0,y:0,
+    alignX:false,
+    alignDirectionX:'right',
+    alignMarginX:5,
+    alignY:false,
+    alignDirectionY:'top',
+    alignMarginY:5,
+    hook:false,
+    hookObject:{},
+    hookFunction:()=>{},
+}
+
+config.defaultDomConfig = {
+   animations:[],
+   animationIdentifier:[],
+   animationCount:0,
+    zIndex:0,
+    type:'div',
+    style:{
+        position:'absolute',
+        translate:'transform(50%,50%)',
+    },
+}
+
 config.defaultGameConfig = {
     pixelDensity:2
 }
@@ -32,18 +57,11 @@ config.defaultObjectProps = {
     animationCount:0,
     initFunctions:["createPreloader"],
     static:true,
-    x:0,y:0,
     rotation:0, 
     positionIndicator:false,
     display:true,opacity:1,
     mouseUpEvent:[],mouseDownEvent:[],mouseMoveEvent:[],
-    zIndex:0,
-    alignX:false,
-    alignDirectionX:'right',
-    alignMarginX:5,
-    alignY:false,
-    alignDirectionY:'top',
-    alignMarginY:5
+    zIndex:0
 }
 
 config.defaultStorageProps = {
