@@ -21,6 +21,9 @@
     "lodash": "^4.17.15"
   },
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.6",
+    "babel": "^6.23.0",
     "jest": "^26.0.1"
   }
 }
