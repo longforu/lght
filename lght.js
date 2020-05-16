@@ -1157,11 +1157,11 @@ lght.img = class extends lght.shape{
 //<--------------MOUSE INPUT GO HERE---------------------->
 
 lght.app.prototype.startCursor = function(){
-    this.canvas.style.cursor = 'pointer'
+    this.eventElement.style.cursor = 'pointer'
 }
 
 lght.app.prototype.endCursor = function(){
-    this.canvas.style.cursor = 'default'
+    this.eventElement.style.cursor = 'default'
 }
 
 lght.object.prototype.enterCursorEvent = function(){
