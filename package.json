@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "deploy":"./deploy.bash"
+    "deploy": "./deploy.bash"
   },
   "repository": {
     "type": "git",
