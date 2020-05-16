@@ -1,0 +1,22 @@
+{
+  "name": "lght",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lght.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VietLongTran/lght.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VietLongTran/lght/issues"
+  },
+  "homepage": "https://github.com/VietLongTran/lght#readme",
+  "dependencies": {
+    "lodash": "^4.17.15"
+  }
+}
