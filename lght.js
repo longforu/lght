@@ -2,127 +2,12 @@
 /* eslint-disable no-unused-vars */
 //LIGHT LIBRARY IS DEVELOPED BY LONG TRAN
 //COPYRIGHT 2020, ALL RIGHTS RESERVED
-//hello
 
-import {getByDotNotation, changeByDotNotation , mergeDefaultPropertyObject, findDistance2Point, findIntersection, rotatePoint, degToRad, findAngle2Point ,findClosestPoint, calculateRotatePoint, radToDeg} from './util/util'
+import {getByDotNotation, changeByDotNotation , mergeDefaultPropertyObject, findDistance2Point, findIntersection, rotatePoint, degToRad, findAngle2Point ,findClosestPoint, calculateRotatePoint, radToDeg, mobileCheck} from './modules/util.js'
+import config from './modules/config.js'
+import draw from './modules/draw.js'
 let lght = {};
-window.mobileCheck = function() {
-    let check = false;
-    (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4))) check = true;})(navigator.userAgent||navigator.vendor||window.opera);
-    return check;
-  };
   
-
-//Config
-lght.inputReference = {};
-lght.inputReference.movementIndex = 
-    ['w','a','s','d','ArrowUp','ArrowLeft','ArrowDown','ArrowRight'];
-
-lght.inputReference.coeffIndex = 
-    [[0,-1],[-1,0],[0,1],[1,0],[0,-1],[-1,0],[0,1],[1,0]];
-
-lght.defaultAppConfig = {
-    initFunctions:["visualInit",'mouseInputInit'],
-    animateFunctions:["animate","update","render"],
-    lastFrame:undefined,
-    constantRender:true,
-    background:"black",
-    pixelDensity:1,
-    eventListeners:[],
-    eventListenersFunction:[]
-}
-
-lght.defaultObjectProps = {
-    shapes:[],
-    animations:[],
-    behaviors:[],
-    behaviorFuncs:[],
-    behaviorQueue:[],
-    hoverEvents:[],
-    animationCount:0,
-    initFunctions:["createPreloader"],
-    static:true,
-    x:0,y:0,
-    rotation:0, 
-    positionIndicator:false,
-    display:true,opacity:1,
-    mouseUpEvent:[],mouseDownEvent:[],mouseMoveEvent:[],
-    zIndex:0,
-    alignX:false,
-    alignDirectionX:'right',
-    alignMarginX:5,
-    alignY:false,
-    alignDirectionY:'top',
-    alignMarginY:5
-}
-
-lght.defaultStorageProps = {
-    spacing:0,
-    direction:'row',
-    model:[],
-    margin:0
-}
-
-lght.defaultAdvanceStorageProps = {
-    paddingTop:10,
-    paddingBottom:10,
-    paddingLeft:10,
-    paddingRight:10,
-    backgroundFunction:null
-}
-
-lght.defaultShapeOptions = {
-    kind:"rect",
-    animations:[],
-    hoverEvents:[],
-    animationCount:0,
-    x:0,y:0,rotation:0,scaleX:1,scaleY:1,
-    color:"black",display:true,
-    lineWidth:1, opacity:1,
-    borderColor:'yellow',
-    borderWidth:10,
-    border:false, borderOnly:false,
-    shadow:null,mouseUpEvent:[],mouseDownEvent:[],mouseMoveEvent:[]
-}
-
-lght.defaultRectOptions = {
-    w:0,h:0,clip:false,
-    clipImageLink:null,clipCanvas:null,
-    clipSpriteSheetX:null,clipSpriteSheetY:null,
-    spriteLengthX:null,spriteLengthY:null
-}
-
-lght.defaultArcOptions = {
-    rad:0, arcDegree:360,
-}
-
-lght.defaultTextOptions = {
-    textAlign:'center',
-    fontFamily:'Arial Bold',
-    fontSize:10,
-    text:'Hello World',
-    fontBackwardCompatibility:undefined
-}
-
-lght.defaultImgOptions = {
-    spriteLink:null,
-    drawWidth:null,drawHeight:null,
-    loadedFunction:undefined
-}
-
-lght.defaultPolyOptions = {
-    points:[],
-    specialPolygon:false,
-    numberOfSide:0,
-    radius:10,
-    clip:false,
-    clipImageLink:null
-}
-
-lght.defaultLineOptions = {
-    points:[]
-}
-
 //Main
 lght.apps = [];
 
@@ -145,14 +30,12 @@ lght.gameloop.loop = (time)=>{
     }
 }
 
-
-
 lght.gameloop.loop();
 
 lght.app = function(elem,options) {
 
     this.options = {};
-    mergeDefaultPropertyObject(options,lght.defaultAppConfig,this.options)        
+    mergeDefaultPropertyObject(options,config.defaultAppConfig,this.options)        
     this.canvas = elem;
     this.eventListeners = []
     this.eventListenersFunction = []
@@ -225,7 +108,7 @@ lght.object = class {
         this.parent = parent;
         this.parent.objects.push(this)
         mergeDefaultPropertyObject
-        (property,lght.defaultObjectProps,this);    
+        (property,config.defaultObjectProps,this);    
         this.initFunctions.forEach((e)=>this[e]())        
         this.name = (property.objectName)?property.objectName:`Object ${this.id}`
     }
@@ -358,7 +241,7 @@ lght.app.prototype.useTemplate = (name,model)=> lght.templates[lght.templateName
 lght.storage = class extends lght.object{
     constructor(property,parent){
         super(property,parent)
-        mergeDefaultPropertyObject(property,lght.defaultStorageProps,this)
+        mergeDefaultPropertyObject(property,config.defaultStorageProps,this)
         this.storageShapes = []
         this.model = property.model || []
         this.elementFunction = property.elementFunction || null
@@ -434,7 +317,7 @@ lght.storage = class extends lght.object{
 lght.advanceStorage = class extends lght.storage{
     constructor(property,parent){
         super(property,parent)
-        mergeDefaultPropertyObject(property,lght.defaultAdvanceStorageProps,this)
+        mergeDefaultPropertyObject(property,config.defaultAdvanceStorageProps,this)
         this.updateToModel()
     }
 
@@ -586,7 +469,7 @@ lght.shape = class {
         this.parent = parent;
         this.parent.shapes.push(this);
         mergeDefaultPropertyObject
-        (property,lght.defaultShapeOptions,this);
+        (property,config.defaultShapeOptions,this);
     }
 
     kill (){
@@ -715,7 +598,7 @@ lght.shape = class {
 lght.rect = class extends lght.shape{
     constructor (property,parent){
         super(property,parent)
-        mergeDefaultPropertyObject(property,lght.defaultRectOptions,this)
+        mergeDefaultPropertyObject(property,config.defaultRectOptions,this)
     }
 
     findVertex(){
@@ -733,7 +616,7 @@ lght.rect = class extends lght.shape{
 lght.arc = class extends lght.shape{
     constructor (property,parent){
         super(property,parent)
-        mergeDefaultPropertyObject(property,lght.defaultArcOptions,this)
+        mergeDefaultPropertyObject(property,config.defaultArcOptions,this)
     }
 
     get radius(){
@@ -878,7 +761,7 @@ lght.roundedRectangle = class extends lght.rect{
 lght.poly = class extends lght.shape{
     constructor(property,parent){
         super(property,parent)
-        mergeDefaultPropertyObject(property,lght.defaultPolyOptions,this)
+        mergeDefaultPropertyObject(property,config.defaultPolyOptions,this)
         if(this.clip){
             this.clipImage = lght.sprite(this.clipImageLink,()=>{
                 this.parent.updateVisual()
@@ -923,7 +806,7 @@ lght.poly = class extends lght.shape{
 lght.line = class extends lght.shape{
     constructor(property,parent){
         super(property,parent)
-        mergeDefaultPropertyObject(property,lght.defaultLineOptions,this)
+        mergeDefaultPropertyObject(property,config.defaultLineOptions,this)
     }
 
     get rotatedPoints(){
@@ -964,7 +847,7 @@ lght.line = class extends lght.shape{
 lght.text = class extends lght.shape{
     constructor (property,parent){
         super(property,parent)
-        mergeDefaultPropertyObject(property,lght.defaultTextOptions,this)
+        mergeDefaultPropertyObject(property,config.defaultTextOptions,this)
         if(property.font) this.fontBackwardCompatibility = property.font
     }
     
@@ -1011,7 +894,7 @@ lght.text = class extends lght.shape{
 lght.img = class extends lght.shape{
     constructor (property,parent){
         super(property,parent)
-        mergeDefaultPropertyObject(property,lght.defaultImgOptions,this)
+        mergeDefaultPropertyObject(property,config.defaultImgOptions,this)
         this.sprite = lght.sprite(this.spriteLink,()=>{
             if(this.loadedFunction) this.loadedFunction()
             this.parent.updateVisual()
@@ -1058,9 +941,9 @@ lght.img = class extends lght.shape{
     var cd = true; var obj = this
     document.addEventListener('keydown',function(key){
         if(cd){
-            if(lght.inputReference.movementIndex.indexOf(key.key)!==-1){
-                obj.x += lght.inputReference.coeffIndex[lght.inputReference.movementIndex.indexOf(key.key)][0]*velocity;
-                obj.y += lght.inputReference.coeffIndex[lght.inputReference.movementIndex.indexOf(key.key)][1]*velocity;
+            if(config.inputReference.movementIndex.indexOf(key.key)!==-1){
+                obj.x += config.inputReference.coeffIndex[config.inputReference.movementIndex.indexOf(key.key)][0]*velocity;
+                obj.y += config.inputReference.coeffIndex[config.inputReference.movementIndex.indexOf(key.key)][1]*velocity;
                 obj.updateVisual();
                 if(func) func(key,obj);
                 cd = false; 
@@ -1094,7 +977,7 @@ lght.shape.prototype.enterCursorEvent = function(){
 }
 
 lght.app.prototype.attachEvent = function(event,func){
-    const mobile = window.mobileCheck()
+    const mobile = mobileCheck()
     let trueEvent = event
     if(mobile){
         switch(trueEvent){
@@ -1113,7 +996,7 @@ lght.app.prototype.attachEvent = function(event,func){
     }
     this.addEventListener(trueEvent,(e)=>{
         if(this.killed) return 
-        if(window.mobileCheck()){
+        if(mobileCheck()){
             Array.from(e.changedTouches).forEach(touch=>{
                 const [x,y] = this.translateMouseCoor(touch)
                 func(x,y)
@@ -1238,9 +1121,9 @@ lght.object.prototype.attachQuickMovement = function (velocity,cooldown,func) {
     var cd = true; var obj = this
     document.addEventListener('keydown',function(key){
         if(cd){
-            if(lght.inputReference.movementIndex.indexOf(key.key)!==-1){
-                obj.x += lght.inputReference.coeffIndex[lght.inputReference.movementIndex.indexOf(key.key)][0]*velocity;
-                obj.y += lght.inputReference.coeffIndex[lght.inputReference.movementIndex.indexOf(key.key)][1]*velocity;
+            if(config.inputReference.movementIndex.indexOf(key.key)!==-1){
+                obj.x += config.inputReference.coeffIndex[config.inputReference.movementIndex.indexOf(key.key)][0]*velocity;
+                obj.y += config.inputReference.coeffIndex[config.inputReference.movementIndex.indexOf(key.key)][1]*velocity;
                 obj.updateVisual();
                 if(func) func(key,obj);
                 cd = false; 
@@ -1449,7 +1332,7 @@ lght.object.prototype.updateVisual = function(){
     this.shapes.forEach(s=>{
         let x = this.preloader.ox + s.x
         let y = this.preloader.oy + s.y
-        lght.drawShape(this.preloader.context,x,y,s,)
+        draw.drawShape(this.preloader.context,x,y,s,)
     })
     if(!this.parent.options.constantRender) this.parent.turnFunctions(this.parent)
 }
@@ -1484,7 +1367,7 @@ lght.object.prototype.drawPreloader = function(){
 
         this.parent.context.save()
         this.parent.context.translate(~~(this.posX+0.5),~~(this.posY+0.5))
-        lght.drawImg(this.parent.context,this.preloader,this.preloader.width,this.preloader.height);
+        draw.drawImg(this.parent.context,this.preloader,this.preloader.width,this.preloader.height);
         this.parent.context.restore()
     }
 }
@@ -1495,173 +1378,11 @@ lght.object.prototype.draw = function(){
     if(!this.display) return
     if(this.static) return this.drawPreloader()
     this.shapes.forEach(s=>{
-        lght.drawShape(this.parent.context,this.posX+s.x,this.posY+s.y,s)
+        draw.drawShape(this.parent.context,this.posX+s.x,this.posY+s.y,s)
     })
 }
 
 //MASTER FUNCTION
-lght.drawShape = function(c,x,y,shape){
-    x = ~~(x+0.5)
-    y = ~~(y+0.5)
-    if(!shape.display) return
-    if(shape.border || shape.borderOnly) this.drawShapeKind(c,shape,x,y,true,1,shape.borderColor,shape.shadow);
-    else if(!shape.borderOnly && !shape.border) this.drawShapeKind(c,shape,x,y,false,shape.opacity,shape.color,shape.shadow);
-    if(!shape.borderOnly) this.drawShapeKind(c,shape,x,y,false,shape.opacity,shape.color);
-}
-
-lght.drawShapeKind = function(c,s,x,y,stroke,opacity,color,shadow){
-    opacity = opacity * s.parent.opacity;
-    if(opacity == 0 || opacity <0 ) return
-
-    c.save()
-    c.globalAlpha = opacity
-    c.fillStyle = color
-    c.strokeStyle = color
-    c.lineWidth = s.borderWidth
-    c.translate(x,y)
-    c.scale(s.scaleX,s.scaleY)
-
-    if(shadow){
-        const {color,blur,offsetX,offsetY} = shadow
-        c.shadowColor = color
-        c.shadowBlur = blur
-        c.shadowOffsetX = offsetX
-        c.shadowOffsetY = offsetY
-    }
-
-    switch(s.kind){
-        case 'rect':
-            lght.drawRect(c, s.w, s.h, s.rotation, stroke); break;
-        case 'arc':
-            lght.drawArc(c, s.rad,s.arcDegree,s.rotation, stroke); break;
-        case 'text':
-            lght.drawText(c, s.text,s.font, stroke,s.textAlign ,s.w, s.h,s.rotation); break;
-        case 'img':
-            if(s.imageLoaded) lght.drawImg(c, s.sprite,s.w,s.h,s.rotation); break;
-        case 'poly':
-            lght.drawPoly(c, s.polyPoints,s.rotation, stroke); break;
-        case 'line':
-            if(stroke){
-                const points = s.points.map(((position,index)=>{
-                    const [x,y] = position
-                    if(index === 0){
-                        const angle = degToRad(findAngle2Point(...position,...s.points[index+1]))
-                        return [x-s.borderWidth*Math.cos(angle),y+s.borderWidth*Math.sin(angle)]
-                    }
-                    else if(index === s.points.length-1){
-                        const angle = degToRad(findAngle2Point(...position,...s.points[index-1]))
-                        return [x-s.borderWidth*Math.cos(angle),y+s.borderWidth*Math.sin(angle)]
-                    }
-                    else return [x,y]
-                }))
-                lght.drawLine(c,points,s.rotation,s.lineWidth+s.borderWidth);
-            }
-            else lght.drawLine(c,s.points,s.rotation,s.lineWidth); break;
-        case 'roundedRectangle':
-            lght.drawRoundedRectangle(c,s.w,s.h,s.rotation,s.borderRadius,stroke)
-            break
-        default:
-            break
-    }
-    if(s.clip && s.clipImageLoaded){
-        c.clip()
-        c.rotate(degToRad(s.rotation))
-        if(typeof s.clipSpriteSheetX === 'number' && typeof s.clipSpriteSheetY === 'number'){
-            const spriteWidth = s.clipImage.width / s.spriteLengthX
-            const spriteHeight = s.clipImage.height / s.spriteLengthY
-            const clipStartX = s.clipSpriteSheetX * spriteWidth
-            const clipStartY = s.clipSpriteSheetY * spriteHeight
-            c.drawImage(s.clipImage,clipStartX,clipStartY,spriteWidth,spriteHeight,(-s.width/2)/s.scaleX,(-s.height/2)/s.scaleY,s.width/s.scaleX,s.height/s.scaleY)
-        }
-        else c.drawImage(s.clipImage,(-s.width/2)/ s.scaleX,(-s.height/2)/ s.scaleY,s.width / s.scaleX,s.height / s.scaleY)
-    }
-
-    c.restore()
-}
-
-//DRAWING RECTANGLE
-lght.drawRect = function(c,w,h,rotation,stroke){
-    c.rotate(degToRad(360-rotation))
-    if(stroke) c.strokeRect(-w/2,-h/2,w,h);
-    else c.fillRect(-w/2,-h/2,w,h);
-}
-
-lght.drawRoundedRectangle = (c,w,h,rotation,borderRadius,stroke)=>{
-    c.rotate(degToRad(360,rotation))
-    c.beginPath()
-    c.moveTo(0,-h*0.5)
-    c.lineTo(-w*0.5+borderRadius,-h*0.5)
-    c.quadraticCurveTo(-w*0.5,-h*0.5,-w*0.5,-h*0.5+borderRadius)
-    c.lineTo(-w*0.5,h*0.5-borderRadius)
-    c.quadraticCurveTo(-w*0.5,h*0.5,-w*0.5+borderRadius,h*0.5)
-    c.lineTo(w*0.5-borderRadius,h*0.5)
-    c.quadraticCurveTo(w*0.5,h*0.5,w*0.5,h*0.5-borderRadius)
-    c.lineTo(w*0.5,-h*0.5+borderRadius)
-    c.quadraticCurveTo(w*0.5,-h*0.5,w*0.5-borderRadius,-h*0.5)
-    c.lineTo(0,-h*0.5)
-    c.closePath()
-    if(stroke) c.stroke()
-    else c.fill()
-}
-
-//DRAWING CIRCLES
-lght.drawArc = function(c,rad,arcDegree,rotation,stroke){
-    c.beginPath();
-
-    const br = degToRad(360 - rotation - arcDegree);
-    const er = degToRad(360 - rotation);
-
-    if(arcDegree < 360){
-        const [x,y] = rotatePoint(0,0,rad,0,360-rotation-arcDegree);
-        c.moveTo(x,y); c.moveTo(0,0);
-    }
-
-    c.arc(0,0,rad,br,er);
-
-    if(stroke) c.stroke();
-    else c.fill();
-    c.closePath();
-
-}
-
-//DRAWING TEXT
-
-lght.drawText = function(c,text,font,stroke,textAlign,width,height,rotation){
-    c.font = font;
-    c.rotate(degToRad(360-rotation))
-    let x
-    if(textAlign === 'center') x = ~~(-width/2 +  0.5)
-    else if(textAlign==='left') x = 0
-    else x=~~(-width + 0.5)
-    if(stroke) c.strokeText(text,x,~~(height/3.5 + 0.5));
-    else c.fillText(text,x,~~(height/3.5 + 0.5))
-}
-
-//DRAWING IMAGES
-lght.drawImg = function(c,sprite,w,h,rotation){
-    c.rotate(degToRad(360-rotation));
-    c.drawImage(sprite,-w/2,-h/2,w,h);
-}
-
-lght.drawPoly = (c,points,rotation,stroke) => {
-    if(points.length === 0 || !points) return 
-    c.rotate(degToRad(360-rotation))
-    c.beginPath()
-    c.moveTo(...points[0])
-    points.forEach(([x,y])=>c.lineTo(x,y))
-    c.closePath()
-    if(stroke) c.stroke()
-    else c.fill()
-}
-
-lght.drawLine = (c,points,rotation,lineWidth)=>{
-    c.beginPath()
-    c.rotate(degToRad(360-rotation))
-    c.moveTo(...points[0])
-    points.forEach(([x,y])=>c.lineTo(x,y))
-    c.lineWidth = lineWidth
-    c.stroke()
-}
 
 lght.object.prototype.addShape = function (property) {
     let shape = new lght[property.kind](property,this);
