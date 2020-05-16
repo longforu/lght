@@ -32,6 +32,58 @@ lght.gameloop.loop = (time)=>{
 
 lght.gameloop.loop();
 
+lght.game = class{
+    constructor(elem,option={}){
+        this.divElement = elem
+        console.log(this.divElement)
+        this.layers = []
+        mergeDefaultPropertyObject(option,config.defaultGameConfig,this)
+        window.addEventListener('resize',()=>{if(!this.killed) this.layers.forEach((e,i)=>{
+            e.canvas.width = this.divElement.clientWidth * this.pixelDensity
+            e.canvas.height = this.divElement.clientHeight*this.pixelDensity
+            if(!e.options.constantRender) e.refresh()
+        })})
+        this.addLayer({constantRender:false}).addLayer().addLayer({constantRender:false})
+        if(option.backgroundColor) this.setBackground(option.backgroundColor)
+        
+    }
+    removeLayer = (index)=> this.layers.splice(index,1).kill()
+    addLayer(option,index = this.layers.length){
+        let canvas = document.createElement('canvas')
+        canvas.style.width = '100%'
+        canvas.style.height = '100%'
+        canvas.style.position='absolute'
+        canvas.style.left = '0px'
+        canvas.style.top = '0px'
+        canvas.width = this.divElement.clientWidth * this.pixelDensity
+        canvas.height = this.divElement.clientHeight * this.pixelDensity
+        this.divElement.append(canvas)
+        let opt = {pixelDensity:this.pixelDensity}
+        if(option) opt = {...opt,...option}
+        console.log(opt)
+        this.layers.splice(index,0,new lght.app(canvas,opt))
+        this.layers.forEach((e,i)=>e.canvas.style.zIndex = i)
+        return this
+    }
+    loadLayer(layer,index = this.layers.length-1){
+        
+    }
+    replaceAndLoad(index,layer){
+
+    }
+    kill(){
+        this.killed = true
+        this.layers.forEach(i=>i.kill())
+    }
+    setBackground = color=>{
+        this.layers[0].backgroundColor = color
+        console.log(this.layers[0])
+        this.layers[0].refresh()
+    }
+}
+
+//layer is an object with 2 thing: the option for game, and the objects option of the app gameOption objectOption
+
 lght.app = function(elem,options) {
 
     this.options = {};
@@ -48,6 +100,7 @@ lght.app = function(elem,options) {
 }
 
 lght.app.prototype.turnFunctions = (obj)=>{
+    if(!obj.options.constantRender) console.log(obj)
     obj.options.animateFunctions.forEach((e)=>obj[e]())
 }
 
@@ -93,8 +146,10 @@ lght.app.prototype.translateMouseCoor = function(e){
     if(this.canvas.parentElement.scrollTop && this.canvas.style.position !== 'fixed') x+=this.canvas.parentElement.scrollTop
 	x -= this.canvas.offsetLeft;
 	y -= this.canvas.offsetTop;
-	return [x*this.pixelDensity,y*this.pixelDensity];
+	return [x*this.options.pixelDensity,y*this.options.pixelDensity];
 }
+
+lght.app.prototype.refresh = function(){console.log(this,this.turnFunctions,this.options);this.turnFunctions(this)}
 
 //Object
 

@@ -1,3 +1,5 @@
+import {getByDotNotation, changeByDotNotation , mergeDefaultPropertyObject, findDistance2Point, findIntersection, rotatePoint, degToRad, findAngle2Point ,findClosestPoint, calculateRotatePoint, radToDeg, mobileCheck} from './util.js'
+
 const draw = {}
 draw.drawShape = function(c,x,y,shape){
       x = ~~(x+0.5)

@@ -11,10 +11,15 @@ config.defaultAppConfig = {
     animateFunctions:["animate","update","render"],
     lastFrame:undefined,
     constantRender:true,
-    background:"black",
-    pixelDensity:1,
+    background:"none",
+    canvasOnly:true,
+    pixelDensity:2,
     eventListeners:[],
     eventListenersFunction:[]
+}
+
+config.defaultGameConfig = {
+    pixelDensity:2
 }
 
 config.defaultObjectProps = {
