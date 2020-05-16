@@ -32,15 +32,16 @@ config.defaultCoordinateConfig = {
 }
 
 config.defaultDomConfig = {
-   animations:[],
-   animationIdentifier:[],
-   animationCount:0,
+    animations:[],
+    animationIdentifier:[],
+    animationCount:0,
     zIndex:0,
-    type:'div',
-    style:{
-        position:'absolute',
-        translate:'transform(50%,50%)',
-    },
+    type:'div'
+}
+
+config.defaultStyleConfig = {
+    position:'absolute',
+    translate:'transform(50%,50%)',
 }
 
 config.defaultGameConfig = {

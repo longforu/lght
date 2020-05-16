@@ -169,6 +169,8 @@ lght.element = class extends lght.coordinate{
         mergeDefaultPropertyObject(option,config.defaultDomConfig,this)
         this.element = document.createElement(this.type)
         this.parent = parent
+        this.style = {}
+        mergeDefaultPropertyObject(option.style,config.defaultStyleConfig,this.style)
         this.parseStyle()
         this.parent.divElement.appendChild(this.element)
     }
