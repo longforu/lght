@@ -47,7 +47,7 @@ lght.game = class{
         if(option.backgroundColor) this.setBackground(option.backgroundColor)
         
     }
-    removeLayer = (index)=> this.layers.splice(index,1).kill()
+    removeLayer(index){this.layers.splice(index,1).kill()}
     addLayer(option,index = this.layers.length){
         let canvas = document.createElement('canvas')
         canvas.style.width = '100%'
