@@ -1,1 +1,1 @@
-describe("It should work",()=>{})
+test(" should work",()=>{})

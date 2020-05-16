@@ -18,5 +18,8 @@
   "homepage": "https://github.com/VietLongTran/lght#readme",
   "dependencies": {
     "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "jest": "^26.0.1"
   }
 }
