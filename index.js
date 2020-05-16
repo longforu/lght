@@ -1,4 +1,4 @@
-var _temp, _temp2;
+var _temp, _temp2, _temp3;
 
 /* eslint-disable no-fallthrough */
 
@@ -42,6 +42,8 @@ lght.game = (_temp = class {
     this.divElement = elem;
     console.log(this.divElement);
     this.layers = [];
+    this.elements = [];
+    this.doms = [];
     mergeDefaultPropertyObject(option, config.defaultGameConfig, this);
     window.addEventListener('resize', () => {
       if (!this.killed) this.layers.forEach((e, i) => {
@@ -62,26 +64,42 @@ lght.game = (_temp = class {
     this.layers.splice(index, 1).kill();
   }
 
+  addElement(option, index = this.elements.length) {
+    const element = new lght.element(option, this);
+    this.doms.push(element);
+    this.elements.splice(index, 0, element.element);
+    return element;
+  }
+
   addLayer(option, index = this.layers.length) {
-    let canvas = document.createElement('canvas');
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    canvas.style.position = 'absolute';
-    canvas.style.left = '0px';
-    canvas.style.top = '0px';
+    let canvas = this.addElement({
+      type: 'canvas',
+      style: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        left: '0px',
+        top: '0px',
+        backgroundColor: 'transparent'
+      }
+    }).element;
     canvas.width = this.divElement.clientWidth * this.pixelDensity;
     canvas.height = this.divElement.clientHeight * this.pixelDensity;
-    this.divElement.append(canvas);
     let opt = {
       pixelDensity: this.pixelDensity
     };
     if (option) opt = { ...opt,
       ...option
     };
-    console.log(opt);
     this.layers.splice(index, 0, new lght.app(canvas, opt));
-    this.layers.forEach((e, i) => e.canvas.style.zIndex = i);
+    this.resetZIndex();
     return this;
+  }
+
+  resetZIndex() {
+    this.elements.forEach((e, i) => {
+      e.style.zIndex = e.zIndex || i;
+    });
   }
 
   loadLayer(layer, index = this.layers.length - 1) {}
@@ -91,9 +109,142 @@ lght.game = (_temp = class {
   kill() {
     this.killed = true;
     this.layers.forEach(i => i.kill());
+    this.dom.forEeach(i => i.kill());
   }
 
 }, _temp); //layer is an object with 2 thing: the option for game, and the objects option of the app gameOption objectOption
+
+lght.coordinate = (_temp2 = class {
+  constructor(option, element) {
+    this.translateToRealPixel = (num, extraInfo) => {
+      if (num.match(/%/)) return parseInt(num.split('').filter(e => e !== '%').join('')) / 100 * extraInfo;
+      return parseInt(num);
+    };
+
+    mergeDefaultPropertyObject(option, config.defaultCoordinateConfig, this);
+    this.coordinateElement = element;
+  }
+
+  get parentWidth() {
+    return this.coordinateElement.width || this.coordinateElement.clientWidth;
+  }
+
+  get parentHeight() {
+    return this.coordinateElement.height || this.coordinateElement.clientHeight;
+  }
+
+  get posX() {
+    if (this.hook && typeof this.hookObject.posX === 'number') return this.hookObject.posX + this.x;
+    if (this.hook && typeof this.hookFunction().posX === 'number') return this.hookFunction().posX + this.x;
+
+    if (this.alignX) {
+      let base;
+      if (this.alignDirectionX === 'left') base = 0;else if (this.alignDirectionX === 'right') base = this.parentWidth;else base = this.parentWidth / 2;
+      const coeff = this.alignDirectionX === 'left' || this.alignDirectionX === 'center' ? 1 : -1;
+      return base + coeff * this.alignMarginX;
+    }
+
+    if (typeof this.x === 'number') return this.x;
+    const arr = this.x.split(' ');
+    if (arr.length === 1) return this.translateToRealPixel(arr[0], this.parentWidth);else {
+      let i = 0;
+
+      while (i < arr.length) {
+        if (arr[i] === '+' || arr[i] === '-') {
+          const coeff = arr[i] === '+' ? 1 : -1;
+          arr[i] = this.translateToRealPixel(arr.splice(i + 1, 1), this.parentWidth) + coeff * this.translateToRealPixel(arr.splice(i - 1, 1), this.parentWidth);
+        } else i++;
+      }
+    }
+    return arr[0];
+  }
+
+  get posY() {
+    if (this.hook && typeof this.hookObject.posY === 'number') return this.hookObject.posY + this.y;
+    if (this.hook && typeof this.hookFunction().posY === 'number') return this.hookFunction().posY + this.y;
+
+    if (this.alignY) {
+      let base;
+      if (this.alignDirectionY === 'top') base = 0;else if (this.alignDirectionY === 'bottom') base = this.parentHeight;else base = this.parentHeight / 2;
+      const coeff = this.alignDirectionY === 'top' || this.alignDirectionY === 'center' ? 1 : -1;
+      return base + coeff * this.alignMarginY;
+    }
+
+    if (typeof this.y === 'number') return this.y;
+    const arr = this.y.split(' ');
+    if (arr.length === 1) return this.translateToRealPixel(arr[0], this.parentHeight);else {
+      let i = 0;
+
+      while (i < arr.length) {
+        if (arr[i] === '+' || arr[i] === '-') {
+          const coeff = arr[i] === '+' ? 1 : -1;
+          arr[i] = this.translateToRealPixel(arr.splice(i + 1, 1), this.parentHeight) + coeff * this.translateToRealPixel(arr.splice(i - 1, 1), this.parentHeight);
+        } else i++;
+      }
+    }
+    return arr[0];
+  }
+
+}, _temp2);
+lght.element = (_temp3 = class extends lght.coordinate {
+  constructor(option, parent) {
+    super(option, parent.divElement);
+
+    this.cancelAnimation = id => this.animations[id] = false;
+
+    mergeDefaultPropertyObject(option, config.defaultDomConfig, this);
+    this.element = document.createElement(this.type);
+    this.parent = parent;
+    this.parseStyle();
+    this.parent.divElement.appendChild(this.element);
+  }
+
+  parseStyle() {
+    this.element.style.left = `${this.posX}px`;
+    this.element.style.top = `${this.posY}px`;
+
+    for (let prop in this.style) this.element.style[prop] = this.style[prop];
+  }
+
+  kill() {
+    this.element.remove();
+    const index = lght.gameloop.apps.indexOf(this);
+    lght.gameloop.apps.splice(index, 1);
+    lght.gameloop.list.splice(index, 1);
+  }
+
+  addAnimation(value, time, getter, setter, identifier, callback) {
+    if (identifier) while (this.animationIdentifier.findIndex((e, i) => e === identifier && this.animations[i]) !== -1) this.animations[this.animationIdentifier.findIndex((e, i) => e === identifier && this.animations[i])] = false;
+    this.animations.push(true);
+    this.animationIdentifier.push(identifier);
+    console.log(this.animationIdentifier, this.animations);
+    const id = this.animationCount;
+    this.animationCount++;
+    const change = (value - getter()) / (time / (1000 / 60));
+    const iv = setInterval(() => {
+      if (this.killed || !this.animations[id]) return cancelEverything();
+      const newValue = getter() + change;
+      if (change > 0 && newValue > value) return;
+      if (change < 0 && newValue < value) return;
+      setter(newValue);
+    }, 1000 / 60);
+    const to = setTimeout(() => {
+      if (this.killed || !this.animations[id]) return cancelEverything();
+      setter(value);
+      if (callback) callback();
+      cancelEverything();
+    }, time);
+
+    const cancelEverything = () => {
+      clearTimeout(to);
+      clearInterval(iv);
+      this.animations[id] = false;
+    };
+
+    return id;
+  }
+
+}, _temp3);
 
 lght.app = function (elem, options) {
   this.options = {};
@@ -167,13 +318,9 @@ lght.app.prototype.refresh = function () {
 
 
 lght.objectCount = 0;
-lght.object = (_temp2 = class {
+lght.object = class extends lght.coordinate {
   constructor(property, parent) {
-    this.translateToRealPixel = (num, extraInfo) => {
-      if (num.match(/%/)) return parseInt(num.split('').filter(e => e !== '%').join('')) / 100 * extraInfo;
-      return parseInt(num);
-    };
-
+    super(property, parent.canvas);
     lght.objectCount++;
     this.id = lght.objectCount;
     this.parent = parent;
@@ -200,6 +347,9 @@ lght.object = (_temp2 = class {
   }
 
   get posX() {
+    if (this.hook && typeof this.hookObject.posX === 'number') return this.hookObject.posX + this.x;
+    if (this.hook && typeof this.hookFunction().posX === 'number') return this.hookFunction().posX + this.x;
+
     if (this.alignX) {
       let base;
       if (this.alignDirectionX === 'left') base = 0;else if (this.alignDirectionX === 'right') base = this.parent.canvas.width;else base = this.parent.canvas.width / 2;
@@ -223,6 +373,9 @@ lght.object = (_temp2 = class {
   }
 
   get posY() {
+    if (this.hook && typeof this.hookObject.posY === 'number') return this.hookObject.posY + this.y;
+    if (this.hook && typeof this.hookFunction().posY === 'number') return this.hookFunction().posY + this.y;
+
     if (this.alignY) {
       let base;
       if (this.alignDirectionY === 'top') base = 0;else if (this.alignDirectionY === 'bottom') base = this.parent.canvas.height;else base = this.parent.canvas.height / 2;
@@ -290,7 +443,7 @@ lght.object = (_temp2 = class {
     return this.findMax()[3] - this.findMax(2);
   }
 
-}, _temp2);
+};
 lght.templateNames = [];
 lght.templates = [];
 
@@ -700,6 +853,17 @@ lght.rect = class extends lght.shape {
 
   findVertex() {
     let reference = [[1, -1], [-1, -1], [-1, 1], [1, 1]];
+    let result = [];
+    reference.forEach(([rx, ry]) => {
+      let nx = this.absoluteX + 0.5 * this.width * rx;
+      let ny = this.absoluteY + 0.5 * this.height * ry;
+      result.push(rotatePoint(this.absoluteX, this.absoluteY, nx, ny, this.rotation));
+    });
+    return result;
+  }
+
+  findMidpoint() {
+    let reference = [[0, -1], [-1, 0], [0, 1], [1, 0]];
     let result = [];
     reference.forEach(([rx, ry]) => {
       let nx = this.absoluteX + 0.5 * this.width * rx;
@@ -1341,7 +1505,7 @@ const addAnimation = function (property, value, time, func) {
     changeByDotNotation(property, this, value);
     this.cancelAnimation(id);
     if (this.parent.static !== undefined) this.parent.static = true;else this.static = true;
-    if (this.updateVisual) this.updateVisual();else this.parent.updateVisual();
+    if (this.updateVisual) this.updateVisual();else if (this.parent.updateVisual) this.parent.updateVisual();
     if (func) func();
   }, time);
   const alreadyAnimated = this.animations.find(animation => animation[0] === property);

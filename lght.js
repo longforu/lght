@@ -798,6 +798,16 @@ lght.rect = class extends lght.shape{
         })
         return result
     }
+    findMidpoint(){
+        let reference = [[0,-1],[-1,0],[0,1],[1,0]]
+        let result = []
+        reference.forEach(([rx,ry])=>{
+            let nx = this.absoluteX + 0.5*this.width*rx
+            let ny = this.absoluteY + 0.5*this.height*ry
+            result.push(rotatePoint(this.absoluteX,this.absoluteY,nx,ny,this.rotation))
+        })
+        return result
+    }
 }
 
 lght.arc = class extends lght.shape{

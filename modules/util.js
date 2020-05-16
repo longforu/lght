@@ -1,4 +1,4 @@
-// import _ from 'lodash'
+import _ from 'lodash'
 
 const random = (high,low) => {return Math.round(Math.random()*(high-low+1) + low);}
 	
