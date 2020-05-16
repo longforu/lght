@@ -62,7 +62,7 @@ lght.game = class{
         canvas.height = this.divElement.clientHeight * this.pixelDensity
         let opt = {pixelDensity:this.pixelDensity}
         if(option) opt = {...opt,...option}
-        this.layers.splice(index,0,new lght.app(canvas,opt))
+        this.layers.splice(index,0,new lght.app(canvas,opt,this.divElement))
         this.resetZIndex()
         return this
     }
@@ -218,11 +218,12 @@ lght.element = class extends lght.coordinate{
     cancelAnimation=(id)=>this.animations[id]=false
 }
 
-lght.app = function(elem,options) {
+lght.app = function(elem,options,parentElement) {
 
     this.options = {};
     mergeDefaultPropertyObject(options,config.defaultAppConfig,this.options)        
     this.canvas = elem;
+    this.eventElement= parentElement || this.canvas
     this.eventListeners = []
     this.eventListenersFunction = []
     this.options.initFunctions.forEach((e)=>this[e]())
@@ -241,11 +242,11 @@ lght.app.prototype.turnFunctions = (obj)=>{
 lght.app.prototype.addEventListener =function(event,func){
     this.eventListeners.push(event)
     this.eventListenersFunction.push(func)
-    this.canvas.addEventListener(event,func)
+    this.eventElement.addEventListener(event,func)
 }
 
 lght.app.prototype.removeEventListenr = function(){
-    this.eventListeners.forEach((e,i)=>this.canvas.removeEventListener(e,this.eventListenersFunction[i]))
+    this.eventListeners.forEach((e,i)=>this.eventElement.removeEventListener(e,this.eventListenersFunction[i]))
 }
 
 lght.app.prototype.kill = function(){

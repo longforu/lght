@@ -91,7 +91,7 @@ lght.game = (_temp = class {
     if (option) opt = { ...opt,
       ...option
     };
-    this.layers.splice(index, 0, new lght.app(canvas, opt));
+    this.layers.splice(index, 0, new lght.app(canvas, opt, this.divElement));
     this.resetZIndex();
     return this;
   }
@@ -195,7 +195,8 @@ lght.element = (_temp3 = class extends lght.coordinate {
     mergeDefaultPropertyObject(option, config.defaultDomConfig, this);
     this.element = document.createElement(this.type);
     this.parent = parent;
-    this.style = config.defaultStyleConfig;
+    this.style = { ...config.defaultStyleConfig
+    };
     if (option.style) for (let prop in option.style) this.style[prop] = option.style[prop];
     this.parseStyle();
     this.parent.divElement.appendChild(this.element);
@@ -248,10 +249,11 @@ lght.element = (_temp3 = class extends lght.coordinate {
 
 }, _temp3);
 
-lght.app = function (elem, options) {
+lght.app = function (elem, options, parentElement) {
   this.options = {};
   mergeDefaultPropertyObject(options, config.defaultAppConfig, this.options);
   this.canvas = elem;
+  this.eventElement = parentElement || this.canvas;
   this.eventListeners = [];
   this.eventListenersFunction = [];
   this.options.initFunctions.forEach(e => this[e]());
@@ -269,11 +271,11 @@ lght.app.prototype.turnFunctions = obj => {
 lght.app.prototype.addEventListener = function (event, func) {
   this.eventListeners.push(event);
   this.eventListenersFunction.push(func);
-  this.canvas.addEventListener(event, func);
+  this.eventElement.addEventListener(event, func);
 };
 
 lght.app.prototype.removeEventListenr = function () {
-  this.eventListeners.forEach((e, i) => this.canvas.removeEventListener(e, this.eventListenersFunction[i]));
+  this.eventListeners.forEach((e, i) => this.eventElement.removeEventListener(e, this.eventListenersFunction[i]));
 };
 
 lght.app.prototype.kill = function () {
