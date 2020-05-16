@@ -195,8 +195,8 @@ lght.element = (_temp3 = class extends lght.coordinate {
     mergeDefaultPropertyObject(option, config.defaultDomConfig, this);
     this.element = document.createElement(this.type);
     this.parent = parent;
-    this.style = {};
-    mergeDefaultPropertyObject(option.style || {}, config.defaultStyleConfig, this.style);
+    this.style = config.defaultStyleConfig;
+    if (option.style) for (let prop in option.style) this.style[prop] = option.style[prop];
     this.parseStyle();
     this.parent.divElement.appendChild(this.element);
   }
