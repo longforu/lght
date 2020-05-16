@@ -1,1 +1,1 @@
-describe("Test for now",()=>{})
+test(" should work",()=>{})
